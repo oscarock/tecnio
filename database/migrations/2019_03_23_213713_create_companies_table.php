@@ -17,7 +17,7 @@ class CreateCompaniesTable extends Migration
             $table->bigIncrements('id');
             $table->string('name_company',50);
             $table->integer('nit');
-            $table->integer('address');
+            $table->string('address', 30);
             $table->integer('telephone');
             $table->timestamps();
         });
