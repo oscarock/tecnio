@@ -15,6 +15,10 @@ class CreateCompaniesTable extends Migration
     {
         Schema::create('companies', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->string('name_company',50);
+            $table->integer('nit');
+            $table->integer('address');
+            $table->integer('telephone');
             $table->timestamps();
         });
     }
