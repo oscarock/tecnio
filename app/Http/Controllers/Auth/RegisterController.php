@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\User;
 use App\Profile;
+use App\Company;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -50,12 +51,14 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
+            'name_company' => ['required', 'string'],
+            'nit' => ['required', 'integer'],
+            'address' => ['required', 'string'],
+            'telephone' => ['required', 'integer'],
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
-            'birthdate' => ['required', 'date'],
-            'company_id' => ['required', 'string'],
-            'role_number' => ['required', 'string'],
+            'birthdate' => ['required', 'date']
         ]);
     }
 
@@ -67,7 +70,15 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
+
         //dd($data);
+        $company = new Company;
+        $company->name_company = $data['name_company'];
+        $company->nit = $data['nit'];
+        $company->address = $data['address'];
+        $company->telephone = $data['telephone'];
+        $company->save();
+        
         $user = new User;
         $user->name = $data['name'];
         $user->email = $data['email'];
@@ -75,9 +86,9 @@ class RegisterController extends Controller
         if($user->save()){
             $profile = new Profile;
             $profile->user_id = $user->id;
-            $profile->company_id = $data['company_id'];
+            $profile->company_id = $company->id;
             $profile->birthdate = $data['birthdate'];
-            $profile->role_number = $data['role_number'];
+            $profile->role_number = 3;
             $profile->save();
         }
 
